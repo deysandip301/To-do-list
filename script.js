@@ -4,6 +4,7 @@ let addTask = document.querySelector('.add-task');
 let mainTicketCont = document.querySelector('.main-ticket-cont');
 let prioritySelect = document.querySelector('.priority-color-cont');
 let toolBoxCont = document.querySelector('.toolbox-cont');
+let toolBoxActive = false;
 let addModal = true;
 let lastClickedPriority;
 let taskColor = 'light-red';
@@ -85,26 +86,45 @@ toolBoxCont.addEventListener('click', function (e) {
     console.log(e.target);
     let selectedTool = e.target.classList[1];
     console.log(selectedTool);
-    for (let i = 0; i < mainTicketCont.children.length; i++) {
-        let ticket = mainTicketCont.children[i];
-        let ticketColor = ticket.children[0].classList[1];
-        console.log(ticketColor);
-
+    if(e.target.classList.contains('color')) {
+        toolBoxActive = !toolBoxActive;
+        if(toolBoxActive) {
+            e.target.classList.add('active');
+            for (let i = 0; i < mainTicketCont.children.length; i++) {
+                let ticket = mainTicketCont.children[i];
+                let ticketColor = ticket.children[0].classList[1];
+                console.log(ticketColor);
+                if (selectedTool == ticketColor) {
+                    ticket.style.display = 'block';
+                }
+                else {
+                    ticket.style.display = 'none';
+                }
+            }
+        }
+        else {
+            e.target.classList.remove('active');
+            for (let i = 0; i < mainTicketCont.children.length; i++) {
+                let ticket = mainTicketCont.children[i];
+                ticket.style.display = 'block';
+            }
+        } 
     }
 });
 
 mainTicketCont.addEventListener('click', function (e) {
-    console.log(e.target);
-    console.log(e.target.parentNode);
+    
+    // priority changing functionality
     if(e.target.classList.contains('ticket-color')) {
         colorIndex = colorMap[e.target.classList[1]];
         e.target.classList.remove(e.target.classList[1]);
         colorIndex = (colorIndex + 1) % 4;
         e.target.classList.add(Object.keys(colorMap)[colorIndex]);
     }
+
+    //lock functionality
     if(e.target.parentNode.classList.contains('lock')) {
         let taskArea = e.target.parentNode.parentNode.children[2];
-        console.log(taskArea);
         if(e.target.classList.contains('fa-lock')){
             e.target.classList.remove('fa-lock');
             e.target.classList.add('fa-lock-open');
