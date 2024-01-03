@@ -60,7 +60,6 @@ function generateTask(task,priorityColor) {
                             </div><div class="ticket-id">${id}</div>
                             <div class="ticket-area">${task}</div>
                             <div class="lock"><i class="fa-solid fa-lock"></i></div>`;
-    console.log(ticketCont);
     mainTicketCont.appendChild(ticketCont);
 }
 
@@ -78,22 +77,27 @@ removeBtn.addEventListener('click', function () {
 function removeTicket(e) {
     if (e.target.parentNode.classList.contains('ticket-cont')) {
         e.target.parentNode.remove();
-        console.log(removeTasks);
     }
 }
 
 toolBoxCont.addEventListener('click', function (e) {
-    console.log(e.target);
     let selectedTool = e.target.classList[1];
-    console.log(selectedTool);
-    if(e.target.classList.contains('color')) {
+        if(e.target.classList.contains('color')) {
+        if(e.target.classList.contains('active')) {
+            toolBoxActive = true;
+        }
+        else {
+            toolBoxActive = false;
+        }
+        for (let i=0; i<toolBoxCont.children[0].children.length; i++) {
+            toolBoxCont.children[0].children[i].classList.remove('active');
+        }
         toolBoxActive = !toolBoxActive;
         if(toolBoxActive) {
             e.target.classList.add('active');
             for (let i = 0; i < mainTicketCont.children.length; i++) {
                 let ticket = mainTicketCont.children[i];
                 let ticketColor = ticket.children[0].classList[1];
-                console.log(ticketColor);
                 if (selectedTool == ticketColor) {
                     ticket.style.display = 'block';
                 }
